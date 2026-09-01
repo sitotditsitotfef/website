@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const body = encodeURIComponent(`Bonjour Félix,\n\nMon nom : ${name}\nTéléphone : ${phone}\n\nMon projet / besoin :\n${message}\n\nMerci d'avance pour votre retour !`);
       
       setTimeout(() => {
-        window.location.href = `mailto:contact@sitotditsitotfef.fr?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:sitotditsitotfef@gmail.com?subject=${subject}&body=${body}`;
         submitBtn.textContent = 'Message prêt !';
         setTimeout(() => {
           submitBtn.textContent = originalText;
