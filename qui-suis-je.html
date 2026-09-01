@@ -65,77 +65,176 @@
         </div>
 
         <div class="about-content">
-          <span class="section-tag">Portrait</span>
-          <h3>Bonjour, je m'appelle Félix Gautheron.</h3>
-          <p class="about-lead">
-            Artisan polyvalent installé à Grenoble, passionné par le bois, le métal et la rénovation.
-          </p>
-
-          <div class="about-paragraphs">
-            <p>
-              J'ai créé <strong>Sitôt Dit Si Tôt Fef</strong> (un clin d'œil à mon surnom "Fef" et à ma volonté d'agir promptement !) avec une mission limpide : <em>transformer vos projets en réalité</em> sans compromis sur la qualité ni sur les délais.
-            </p>
-            <p>
-              Mon quotidien se partage entre les chantiers de rénovation d'appartements, l'établi pour fabriquer des agencements sur-mesure en bois et métal (mobilier, tablettes, vans aménagés), et l'atelier de mécanique cycle où j'interviens sur la révision de vélos et la réparation poussée de moteurs de VAE.
-            </p>
-            <p>
-              J'accorde une importance capitale à l'écoute : chaque client a des contraintes propres, un budget et des envies particulières. Mon rôle est de vous guider en toute franchise vers la solution la plus pérenne et la plus esthétique.
-            </p>
+          <!-- Onglets de navigation -->
+          <div class="about-tabs-nav" role="tablist">
+            <button class="about-tab-btn active" data-tab="presentation" role="tab" aria-selected="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Présentation
+            </button>
+            <button class="about-tab-btn" data-tab="diplome" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+              Diplôme & Formation
+            </button>
+            <button class="about-tab-btn" data-tab="valeurs" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              Mes Valeurs
+            </button>
           </div>
 
-          <div class="values-grid">
-            <div class="value-item">
-              <div class="value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-              </div>
-              <div>
-                <div class="value-title">Travail de qualité</div>
-                <div class="value-sub">Finitions soignées & durables</div>
-              </div>
-            </div>
+          <!-- CONTENU ONGLET 1 : PRÉSENTATION -->
+          <div id="presentation" class="about-tab-pane active" role="tabpanel">
+            <span class="section-tag">Portrait</span>
+            <h3>Bonjour, je m'appelle Félix Gautheron.</h3>
+            <p class="about-lead">
+              Artisan polyvalent installé à Grenoble, passionné par le bois, le métal et la rénovation.
+            </p>
 
-            <div class="value-item">
-              <div class="value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-              </div>
-              <div>
-                <div class="value-title">Réactivité</div>
-                <div class="value-sub">Respect des délais annoncés</div>
-              </div>
-            </div>
-
-            <div class="value-item">
-              <div class="value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                </svg>
-              </div>
-              <div>
-                <div class="value-title">Polyvalence</div>
-                <div class="value-sub">Bois, métal, sol, mécanique</div>
-              </div>
-            </div>
-
-            <div class="value-item">
-              <div class="value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                  <polyline points="16 6 12 2 8 6"></polyline>
-                  <line x1="12" y1="2" x2="12" y2="15"></line>
-                </svg>
-              </div>
-              <div>
-                <div class="value-title">Éco-responsable</div>
-                <div class="value-sub">Réparer plutôt que jeter</div>
-              </div>
+            <div class="about-paragraphs">
+              <p>
+                J'ai créé <strong>Sitôt Dit Si Tôt Fef</strong> (un clin d'œil à mon surnom "Fef" et à ma volonté d'agir promptement !) avec une mission limpide : <em>transformer vos projets en réalité</em> sans compromis sur la qualité ni sur les délais.
+              </p>
+              <p>
+                Mon quotidien se partage entre les chantiers de rénovation d'appartements, l'établi pour fabriquer des agencements sur-mesure en bois et métal (mobilier, tablettes, vans aménagés), et l'atelier de mécanique cycle où j'interviens sur la révision de vélos et la réparation poussée de moteurs de VAE.
+              </p>
+              <p>
+                Diplômé en chaudronnerie (Bac Chaudronnier au CFAI de Moirans), j'apporte une solide rigueur technique dans la transformation du métal et la robustesse de chaque fabrication.
+              </p>
+              <p>
+                J'accorde une importance capitale à l'écoute : chaque client a des contraintes propres, un budget et des envies particulières. Mon rôle est de vous guider en toute franchise vers la solution la plus pérenne et la plus esthétique.
+              </p>
             </div>
           </div>
 
+          <!-- CONTENU ONGLET 2 : DIPLÔME & FORMATION -->
+          <div id="diplome" class="about-tab-pane" role="tabpanel">
+            <span class="section-tag">Qualifications & Savoir-Faire</span>
+            <h3>Diplôme & Formation Technique</h3>
+            <p class="about-lead">
+              Un diplôme d'État garant de précision et d'expertise dans le travail du métal.
+            </p>
+
+            <div class="diploma-card">
+              <div class="diploma-header">
+                <div class="diploma-title-wrap">
+                  <div class="diploma-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                      <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="diploma-name">Bac Chaudronnier</div>
+                    <div class="diploma-school">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                      CFAI Moirans (Isère - 38)
+                    </div>
+                  </div>
+                </div>
+                <div class="diploma-year-badge">
+                  <span>Session 2021</span>
+                </div>
+              </div>
+
+              <div class="diploma-details">
+                <h4>Compétences et Maîtrises Certifiées</h4>
+                <div class="diploma-skills-list">
+                  <div class="diploma-skill-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span><strong>Mise en forme des métaux :</strong> Découpe, traçage, pliage, cintrage de précision (acier, inox, alu).</span>
+                  </div>
+                  <div class="diploma-skill-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span><strong>Procédés de soudage :</strong> Maîtrise des soudures TIG, MIG/MAG et assemblage mécano-soudé.</span>
+                  </div>
+                  <div class="diploma-skill-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span><strong>Lecture de plans techniques :</strong> Calcul de développés, respect strict des cotes et tolérances.</span>
+                  </div>
+                  <div class="diploma-skill-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span><strong>Fabrications sur-mesure :</strong> Châssis métalliques, piétements de meubles et structures de vans.</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="diploma-note">
+                💡 <em>Cette qualification obtenue au CFAI de Moirans constitue le socle technique de mes fabrications bois & métal, garantissant des soudures durables, des finitions nettes et une solidité optimale pour tous vos projets.</em>
+              </p>
+            </div>
+          </div>
+
+          <!-- CONTENU ONGLET 3 : VALEURS -->
+          <div id="valeurs" class="about-tab-pane" role="tabpanel">
+            <span class="section-tag">Engagements</span>
+            <h3>Les 4 piliers de mon travail</h3>
+            <p class="about-lead">
+              Ce qui guide chaque intervention et chaque relation avec mes clients.
+            </p>
+
+            <div class="values-grid">
+              <div class="value-item">
+                <div class="value-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="value-title">Travail de qualité</div>
+                  <div class="value-sub">Finitions soignées & durables</div>
+                </div>
+              </div>
+
+              <div class="value-item">
+                <div class="value-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <div class="value-title">Réactivité</div>
+                  <div class="value-sub">Respect des délais annoncés</div>
+                </div>
+              </div>
+
+              <div class="value-item">
+                <div class="value-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="value-title">Polyvalence</div>
+                  <div class="value-sub">Bois, métal, sol, mécanique</div>
+                </div>
+              </div>
+
+              <div class="value-item">
+                <div class="value-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                    <polyline points="16 6 12 2 8 6"></polyline>
+                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <div>
+                  <div class="value-title">Éco-responsable</div>
+                  <div class="value-sub">Réparer plutôt que jeter</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -132,4 +132,32 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 500);
     });
   }
+
+  // 5. Onglets Qui suis-je (Présentation / Diplôme / Valeurs)
+  const tabBtns = document.querySelectorAll('.about-tab-btn');
+  const tabPanes = document.querySelectorAll('.about-tab-pane');
+
+  if (tabBtns.length > 0 && tabPanes.length > 0) {
+    const activateTab = (targetId) => {
+      tabBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === targetId);
+      });
+      tabPanes.forEach(pane => {
+        pane.classList.toggle('active', pane.id === targetId);
+      });
+    };
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-tab');
+        activateTab(target);
+      });
+    });
+
+    // Support des ancres d'URL directes (ex: qui-suis-je.html#diplome)
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+      activateTab(hash);
+    }
+  }
 });
