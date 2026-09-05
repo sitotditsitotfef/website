@@ -577,6 +577,67 @@ ul {
 }
 
 /* ==========================================================================
+   PAGE ACTIVITÉS
+   ========================================================================== */
+
+.activity-item {
+  margin-bottom: 70px;
+  scroll-margin-top: 100px;
+}
+
+.activity-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.activity-content h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.activity-desc {
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  margin-bottom: 20px;
+  line-height: 1.65;
+}
+
+.activity-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.activity-media {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  background-color: #222326;
+  width: 100%;
+}
+
+.activity-img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  display: block;
+}
+
+@media (min-width: 993px) {
+  .activity-block.reverse .activity-content {
+    order: 2;
+  }
+  .activity-block.reverse .activity-media {
+    order: 1;
+  }
+}
+
+/* ==========================================================================
    PROJETS & GALLERY
    ========================================================================== */
 
@@ -1378,6 +1439,20 @@ textarea.form-control {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .activity-block {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .activity-block .activity-content,
+  .activity-block .activity-media {
+    order: unset !important;
+  }
+
+  .activity-img {
+    height: 300px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1503,8 +1578,31 @@ textarea.form-control {
   box-shadow: 0 2px 8px rgba(198, 118, 59, 0.4);
 }
 @media (max-width: 768px) {
+  .activity-item {
+    margin-bottom: 50px;
+  }
+  .activity-block {
+    grid-template-columns: 1fr !important;
+    gap: 22px;
+  }
+  .activity-content h2 {
+    font-size: 1.6rem;
+  }
+  .activity-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+  }
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
   .projects-grid .project-card[style*="grid-column: span 2"] {
     grid-column: span 1 !important;
+  }
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   .before-after-grid {
     grid-template-columns: 1fr;
