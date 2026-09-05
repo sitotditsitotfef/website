@@ -91,14 +91,36 @@
             </div>
           </div>
           <div class="activity-media">
-            <div class="before-after-grid activity-before-after">
-              <div class="before-after-item">
-                <img src="images/projet-renovation-sol-avant.jpg" alt="Pose de sol PVC studio à Grenoble - Avant travaux">
-                <span class="badge-state avant">Avant</span>
+            <div class="before-after-carousel" aria-label="Défilement photo Avant / Après rénovation">
+              <div class="carousel-track">
+                <!-- Slide 1 : Avant -->
+                <div class="carousel-slide active">
+                  <img src="images/projet-renovation-sol-avant.jpg" alt="Pose de sol PVC studio à Grenoble - Avant travaux">
+                  <span class="carousel-badge avant">Avant travaux</span>
+                </div>
+                <!-- Slide 2 : Après -->
+                <div class="carousel-slide">
+                  <img src="images/projet-renovation-sol-apres.jpg" alt="Pose de sol PVC studio à Grenoble - Après travaux">
+                  <span class="carousel-badge apres">Après travaux</span>
+                </div>
               </div>
-              <div class="before-after-item">
-                <img src="images/projet-renovation-sol-apres.jpg" alt="Pose de sol PVC studio à Grenoble - Après travaux">
-                <span class="badge-state apres">Après</span>
+
+              <!-- Boutons précédent / suivant -->
+              <button type="button" class="carousel-btn prev" aria-label="Photo précédente">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button type="button" class="carousel-btn next" aria-label="Photo suivante">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+
+              <!-- Sélecteurs Avant / Après -->
+              <div class="carousel-pills">
+                <button type="button" class="carousel-pill active" data-slide="0">Avant</button>
+                <button type="button" class="carousel-pill" data-slide="1">Après</button>
               </div>
             </div>
           </div>
