@@ -300,14 +300,28 @@
           </div>
         </article>
 
-        <!-- Projet 8 : Table basse bois massif et acier (Bouton pour alterner les photos) -->
         <!-- Projet 8 : Table basse bois massif et acier -->
         <article class="project-card" data-category="bois-metal">
-          <div class="project-img-container photo-switcher" title="Cliquez pour agrandir et faire défiler les photos">
+          <div class="project-img-container photo-switcher" title="Cliquez pour agrandir dans la visionneuse">
             <!-- Vue 1 : Salon -->
             <img src="images/photo%20table%20salon.jpeg" alt="Table basse artisanale en bois massif et piétement acier dans le salon" class="project-img switcher-img active" data-title="Vue salon" data-desc="Conception et fabrication artisanale d'une table basse de salon alliant l'authenticité d'un plateau en chêne massif aux veines apparentes et la modernité d'un piétement en acier brut.">
             <!-- Vue 2 : Détail plateau -->
             <img src="images/photo%20table%20basse.jpeg" alt="Détail du plateau en bois massif et finitions piétement acier" class="project-img switcher-img" data-title="Détail plateau" data-desc="Détail des finitions du plateau en chêne massif et du piétement acier brut aux soudures soignées.">
+
+            <!-- Petits boutons discrets de défilement -->
+            <button type="button" class="photo-mini-arrow prev" aria-label="Photo précédente" title="Photo précédente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button type="button" class="photo-mini-arrow next" aria-label="Photo suivante" title="Photo suivante">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+            <div class="photo-mini-counter" aria-hidden="true">
+              <span class="mini-counter-text">1 / 2</span>
+            </div>
           </div>
           <div class="project-content">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
@@ -332,6 +346,21 @@
             <img src="images/photo%20chantier%20placo%205.jpeg" alt="Chantier placo et isolation thermique - Préparation doublage isolant" class="project-img switcher-img" data-title="5/7 &bull; Préparation doublage" data-desc="Ossature murale terminée et prête à recevoir l'isolant thermique haute performance avant la pose des plaques de plâtre.">
             <img src="images/photo%20chantier%20placo%206.jpeg" alt="Chantier placo et isolation thermique - Cloisons séparatives et réseaux" class="project-img switcher-img" data-title="6/7 &bull; Cloisons & réseaux" data-desc="Montage de l'ossature métallique des cloisons de distribution avec intégration des réservations pour gaines électriques et réseaux techniques.">
             <img src="images/photo%20chantier%20placo%207.jpeg" alt="Chantier placo et isolation thermique - Détail menuiseries extérieures" class="project-img switcher-img" data-title="7/7 &bull; Finitions menuiseries" data-desc="Ajustement précis de la structure métallique autour de la porte d'entrée et de la fenêtre pour un raccordement net et étanche.">
+
+            <!-- Petits boutons discrets de défilement -->
+            <button type="button" class="photo-mini-arrow prev" aria-label="Photo précédente" title="Photo précédente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button type="button" class="photo-mini-arrow next" aria-label="Photo suivante" title="Photo suivante">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+            <div class="photo-mini-counter" aria-hidden="true">
+              <span class="mini-counter-text">1 / 7</span>
+            </div>
           </div>
           <div class="project-content">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">

@@ -2236,6 +2236,77 @@ textarea.form-control {
   height: 380px;
 }
 
+/* Petits boutons de défilement pour les cartes projets (accueil des exemples de projets) */
+.photo-mini-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  color: #1e2023;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 6;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  opacity: 0.88;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.photo-mini-arrow:hover {
+  opacity: 1;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 14px rgba(198, 118, 59, 0.4);
+}
+
+.photo-mini-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.photo-mini-arrow.prev {
+  left: 10px;
+}
+
+.photo-mini-arrow.next {
+  right: 10px;
+}
+
+.photo-mini-arrow svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.photo-mini-counter {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1e2023;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .photo-switcher.gallery-large {
     height: 280px;

@@ -103,6 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (badge && item.dataTitle) badge.textContent = item.dataTitle;
       if (counterBadge) counterBadge.textContent = `${currentGalleryIndex + 1} / ${switcherImgs.length}`;
+      const miniCounter = currentCardContainer.querySelector('.mini-counter-text');
+      if (miniCounter) {
+        miniCounter.textContent = `${currentGalleryIndex + 1} / ${switcherImgs.length}`;
+      }
       if (dots) {
         dots.forEach((dot, idx) => {
           dot.classList.toggle('active', idx === currentGalleryIndex);
@@ -130,8 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (lightboxModal && lightboxImg) {
     document.querySelectorAll('.project-img-container').forEach(container => {
       container.addEventListener('click', (e) => {
-        // Ne pas déclencher la lightbox si clic sur le bouton de bascule ou les puces de la carte
-        if (e.target.closest('.photo-switch-btn') || e.target.closest('.photo-switcher-dots')) {
+        // Ne pas déclencher la lightbox si clic sur les boutons de navigation de la carte
+        if (e.target.closest('.photo-switch-btn') || 
+            e.target.closest('.photo-switcher-dots') || 
+            e.target.closest('.photo-mini-arrow') || 
+            e.target.closest('.photo-mini-counter')) {
           return;
         }
 
@@ -501,6 +508,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const switchBtn = switcher.querySelector('.photo-switch-btn');
     const prevBtn = switcher.querySelector('.photo-switch-prev');
     const nextBtn = switcher.querySelector('.photo-switch-next');
+    const miniPrev = switcher.querySelector('.photo-mini-arrow.prev');
+    const miniNext = switcher.querySelector('.photo-mini-arrow.next');
+    const miniCounter = switcher.querySelector('.mini-counter-text');
     const switchBtnText = switchBtn ? switchBtn.querySelector('.switch-btn-text') : null;
     const badge = switcher.querySelector('.photo-switcher-badge');
     const counterBadge = switcher.querySelector('.photo-counter-badge');
@@ -525,6 +535,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (counterBadge) {
         counterBadge.textContent = `${currentIndex + 1} / ${images.length}`;
+      }
+
+      if (miniCounter) {
+        miniCounter.textContent = `${currentIndex + 1} / ${images.length}`;
       }
 
       if (switchBtnText && nextImg.dataset.title) {
@@ -560,6 +574,27 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Petits boutons flèches discrets sur la carte
+    if (miniPrev) {
+      miniPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const activeIdx = Array.from(images).findIndex(img => img.classList.contains('active'));
+        const target = activeIdx !== -1 ? activeIdx - 1 : currentIndex - 1;
+        showPhoto(target);
+      });
+    }
+
+    if (miniNext) {
+      miniNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const activeIdx = Array.from(images).findIndex(img => img.classList.contains('active'));
+        const target = activeIdx !== -1 ? activeIdx + 1 : currentIndex + 1;
+        showPhoto(target);
+      });
+    }
+
     dots.forEach((dot, idx) => {
       dot.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -580,10 +615,12 @@ document.addEventListener('DOMContentLoaded', () => {
       touchEndX = e.changedTouches[0].screenX;
       const diff = touchEndX - touchStartX;
       if (Math.abs(diff) > 40) {
+        const activeIdx = Array.from(images).findIndex(img => img.classList.contains('active'));
+        const baseIdx = activeIdx !== -1 ? activeIdx : currentIndex;
         if (diff < 0) {
-          showPhoto(currentIndex + 1);
+          showPhoto(baseIdx + 1);
         } else {
-          showPhoto(currentIndex - 1);
+          showPhoto(baseIdx - 1);
         }
       }
     }, { passive: true });
