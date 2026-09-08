@@ -530,13 +530,34 @@
   <!-- LIGHTBOX MODAL -->
   <div id="lightboxModal" class="lightbox-modal" role="dialog" aria-modal="true">
     <div class="lightbox-content">
-      <button id="lightboxClose" class="lightbox-close" aria-label="Fermer la vue grand format">&times;</button>
+      <button id="lightboxClose" class="lightbox-close" aria-label="Fermer la vue grand format" title="Fermer">&times;</button>
       <div class="lightbox-img-wrap">
         <img id="lightboxImg" src="" alt="">
+        <button type="button" id="lightboxPrev" class="lightbox-nav-btn lightbox-prev" aria-label="Photo précédente" title="Photo précédente">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button type="button" id="lightboxNext" class="lightbox-nav-btn lightbox-next" aria-label="Photo suivante" title="Photo suivante">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
       </div>
       <div class="lightbox-info">
-        <h4 id="lightboxTitle" class="lightbox-title"></h4>
+        <div class="lightbox-header-row">
+          <h4 id="lightboxTitle" class="lightbox-title"></h4>
+          <span id="lightboxCounter" class="lightbox-counter"></span>
+        </div>
         <p id="lightboxDesc" class="lightbox-desc"></p>
+        <div class="lightbox-actions" id="lightboxActions">
+          <button type="button" id="lightboxActionNext" class="btn btn-primary btn-sm lightbox-action-btn">
+            <span>Photo suivante</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>

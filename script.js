@@ -55,44 +55,184 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Visionneuse / Lightbox pour les images
+  // 3. Visionneuse / Lightbox avec navigation multi-photos (défilement)
   const lightboxModal = document.getElementById('lightboxModal');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxTitle = document.getElementById('lightboxTitle');
   const lightboxDesc = document.getElementById('lightboxDesc');
   const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const lightboxActionNext = document.getElementById('lightboxActionNext');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  const lightboxActions = document.getElementById('lightboxActions');
+
+  let currentGallery = [];
+  let currentGalleryIndex = 0;
+  let currentCardContainer = null;
+
+  const updateLightboxContent = () => {
+    if (currentGallery.length === 0) return;
+    const item = currentGallery[currentGalleryIndex];
+    if (!item) return;
+
+    lightboxImg.src = item.src;
+    lightboxImg.alt = item.alt || 'Aperçu du projet';
+    if (lightboxTitle) lightboxTitle.textContent = item.title || 'Projet Sitôt Dit Si Tôt Fef';
+    if (lightboxDesc) lightboxDesc.textContent = item.desc || '';
+
+    const hasMultiple = currentGallery.length > 1;
+    if (lightboxCounter) {
+      lightboxCounter.textContent = hasMultiple ? `Photo ${currentGalleryIndex + 1} sur ${currentGallery.length}` : '';
+      lightboxCounter.style.display = hasMultiple ? 'inline-block' : 'none';
+    }
+    if (lightboxPrev) lightboxPrev.style.display = hasMultiple ? 'flex' : 'none';
+    if (lightboxNext) lightboxNext.style.display = hasMultiple ? 'flex' : 'none';
+    if (lightboxActions) lightboxActions.style.display = hasMultiple ? 'flex' : 'none';
+
+    // Synchronisation avec la carte du projet sur la page
+    if (currentCardContainer && currentCardContainer.classList.contains('photo-switcher')) {
+      const switcherImgs = currentCardContainer.querySelectorAll('.switcher-img');
+      const badge = currentCardContainer.querySelector('.photo-switcher-badge');
+      const counterBadge = currentCardContainer.querySelector('.photo-counter-badge');
+      const dots = currentCardContainer.querySelectorAll('.switcher-dot');
+      const switchBtnText = currentCardContainer.querySelector('.photo-switch-btn .switch-btn-text');
+
+      switcherImgs.forEach((img, idx) => {
+        img.classList.toggle('active', idx === currentGalleryIndex);
+      });
+      if (badge && item.dataTitle) badge.textContent = item.dataTitle;
+      if (counterBadge) counterBadge.textContent = `${currentGalleryIndex + 1} / ${switcherImgs.length}`;
+      if (dots) {
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === currentGalleryIndex);
+        });
+      }
+      const nextItem = currentGallery[(currentGalleryIndex + 1) % currentGallery.length];
+      if (switchBtnText && nextItem && nextItem.dataTitle) {
+        switchBtnText.textContent = nextItem.dataTitle;
+      }
+    }
+  };
+
+  const lightboxGoTo = (index) => {
+    if (currentGallery.length <= 1) return;
+    currentGalleryIndex = (index + currentGallery.length) % currentGallery.length;
+    updateLightboxContent();
+  };
+
+  const closeLightbox = () => {
+    if (!lightboxModal) return;
+    lightboxModal.classList.remove('active');
+    document.body.style.overflow = '';
+  };
 
   if (lightboxModal && lightboxImg) {
     document.querySelectorAll('.project-img-container').forEach(container => {
       container.addEventListener('click', (e) => {
-        // Ne pas déclencher la lightbox si clic sur le bouton d'alternance, les flèches ou les puces
-        if (e.target.closest('.photo-switch-btn') || e.target.closest('.photo-switcher-dots') || e.target.closest('.photo-switch-arrow')) {
+        // Ne pas déclencher la lightbox si clic sur le bouton de bascule ou les puces de la carte
+        if (e.target.closest('.photo-switch-btn') || e.target.closest('.photo-switcher-dots')) {
           return;
         }
-        const img = container.querySelector('.switcher-img.active') || container.querySelector('.project-img');
-        const card = container.closest('.project-card');
-        const title = (img && img.dataset.title) ? `${card?.querySelector('.project-title')?.textContent || 'Projet'} - ${img.dataset.title}` : (card ? card.querySelector('.project-title')?.textContent : '');
-        const desc = (img && img.dataset.desc) ? img.dataset.desc : (card ? card.querySelector('.project-desc')?.textContent : '');
 
-        if (img) {
-          lightboxImg.src = img.src;
-          lightboxImg.alt = img.alt || 'Aperçu du projet';
-          if (lightboxTitle) lightboxTitle.textContent = title || 'Projet Sitôt Dit Si Tôt Fef';
-          if (lightboxDesc) lightboxDesc.textContent = desc || '';
+        currentCardContainer = container;
+        currentGallery = [];
+        currentGalleryIndex = 0;
+
+        const card = container.closest('.project-card');
+        const cardTitle = card?.querySelector('.project-title')?.textContent?.trim() || 'Projet';
+        const cardDesc = card?.querySelector('.project-desc')?.textContent?.trim() || '';
+
+        // Cas 1 : Conteneur multi-photos (photo-switcher)
+        const switcherImgs = container.querySelectorAll('.switcher-img');
+        if (switcherImgs.length > 0) {
+          switcherImgs.forEach((img, idx) => {
+            const itemTitle = img.dataset.title ? `${cardTitle} • ${img.dataset.title}` : cardTitle;
+            const itemDesc = img.dataset.desc || cardDesc;
+            currentGallery.push({
+              src: img.src,
+              alt: img.alt,
+              title: itemTitle,
+              desc: itemDesc,
+              dataTitle: img.dataset.title || ''
+            });
+            if (img.classList.contains('active')) {
+              currentGalleryIndex = idx;
+            }
+          });
+        } 
+        // Cas 2 : Carte Avant / Après
+        else if (card && card.querySelector('.before-after-grid')) {
+          const baItems = card.querySelectorAll('.before-after-item');
+          baItems.forEach((item, idx) => {
+            const img = item.querySelector('img');
+            const state = item.querySelector('.badge-state')?.textContent?.trim() || '';
+            if (img) {
+              currentGallery.push({
+                src: img.src,
+                alt: img.alt,
+                title: state ? `${cardTitle} (${state})` : cardTitle,
+                desc: cardDesc
+              });
+              if (item === container) {
+                currentGalleryIndex = idx;
+              }
+            }
+          });
+        }
+        // Cas 3 : Image standard
+        else {
+          const img = container.querySelector('.project-img') || container.querySelector('img');
+          if (img) {
+            currentGallery.push({
+              src: img.src,
+              alt: img.alt,
+              title: cardTitle,
+              desc: cardDesc
+            });
+          }
+        }
+
+        if (currentGallery.length > 0) {
+          updateLightboxContent();
           lightboxModal.classList.add('active');
           document.body.style.overflow = 'hidden';
         }
       });
     });
 
-    const closeLightbox = () => {
-      lightboxModal.classList.remove('active');
-      document.body.style.overflow = '';
-    };
-
     if (lightboxClose) {
       lightboxClose.addEventListener('click', closeLightbox);
     }
+
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        lightboxGoTo(currentGalleryIndex - 1);
+      });
+    }
+
+    if (lightboxNext) {
+      lightboxNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        lightboxGoTo(currentGalleryIndex + 1);
+      });
+    }
+
+    if (lightboxActionNext) {
+      lightboxActionNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        lightboxGoTo(currentGalleryIndex + 1);
+      });
+    }
+
+    // Clic direct sur l'image dans la visionneuse pour passer à la suivante
+    lightboxImg.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentGallery.length > 1) {
+        lightboxGoTo(currentGalleryIndex + 1);
+      }
+    });
 
     lightboxModal.addEventListener('click', (e) => {
       if (e.target === lightboxModal) {
@@ -101,10 +241,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && lightboxModal.classList.contains('active')) {
+      if (!lightboxModal.classList.contains('active')) return;
+      if (e.key === 'Escape') {
         closeLightbox();
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        lightboxGoTo(currentGalleryIndex + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        lightboxGoTo(currentGalleryIndex - 1);
       }
     });
+
+    // Support tactile swipe dans la visionneuse
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightboxModal.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightboxModal.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 40) {
+        if (diff < 0) {
+          lightboxGoTo(currentGalleryIndex + 1);
+        } else {
+          lightboxGoTo(currentGalleryIndex - 1);
+        }
+      }
+    }, { passive: true });
   }
 
   // 4. Interaction formulaire de contact
@@ -313,10 +478,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const desc = card ? card.querySelector('.project-desc')?.textContent : '';
 
         if (chosenImg) {
-          lightboxImg.src = chosenImg.src;
-          lightboxImg.alt = chosenImg.alt || 'Aperçu du projet';
-          if (lightboxTitle) lightboxTitle.textContent = title || 'Projet Sitôt Dit Si Tôt Fef';
-          if (lightboxDesc) lightboxDesc.textContent = desc || '';
+          currentGallery = [{
+            src: chosenImg.src,
+            alt: chosenImg.alt || 'Aperçu du projet',
+            title: title || 'Projet Sitôt Dit Si Tôt Fef',
+            desc: desc || ''
+          }];
+          currentGalleryIndex = 0;
+          currentCardContainer = comp;
+          updateLightboxContent();
           lightboxModal.classList.add('active');
           document.body.style.overflow = 'hidden';
         }
