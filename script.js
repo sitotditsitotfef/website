@@ -65,8 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (lightboxModal && lightboxImg) {
     document.querySelectorAll('.project-img-container').forEach(container => {
       container.addEventListener('click', (e) => {
-        // Ne pas déclencher la lightbox si clic sur le bouton d'alternance ou les puces
-        if (e.target.closest('.photo-switch-btn') || e.target.closest('.photo-switcher-dots')) {
+        // Ne pas déclencher la lightbox si clic sur le bouton d'alternance, les flèches ou les puces
+        if (e.target.closest('.photo-switch-btn') || e.target.closest('.photo-switcher-dots') || e.target.closest('.photo-switch-arrow')) {
           return;
         }
         const img = container.querySelector('.switcher-img.active') || container.querySelector('.project-img');
@@ -324,13 +324,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 8. Alternance de photos avec bouton interactif
+  // 8. Alternance de photos avec bouton interactif, flèches & puces
   const photoSwitchers = document.querySelectorAll('.photo-switcher');
   photoSwitchers.forEach(switcher => {
     const images = switcher.querySelectorAll('.switcher-img');
     const switchBtn = switcher.querySelector('.photo-switch-btn');
+    const prevBtn = switcher.querySelector('.photo-switch-prev');
+    const nextBtn = switcher.querySelector('.photo-switch-next');
     const switchBtnText = switchBtn ? switchBtn.querySelector('.switch-btn-text') : null;
     const badge = switcher.querySelector('.photo-switcher-badge');
+    const counterBadge = switcher.querySelector('.photo-counter-badge');
     const dots = switcher.querySelectorAll('.switcher-dot');
 
     if (images.length < 2) return;
@@ -350,6 +353,10 @@ document.addEventListener('DOMContentLoaded', () => {
         badge.textContent = activeImg.dataset.title;
       }
 
+      if (counterBadge) {
+        counterBadge.textContent = `${currentIndex + 1} / ${images.length}`;
+      }
+
       if (switchBtnText && nextImg.dataset.title) {
         switchBtnText.textContent = nextImg.dataset.title;
       }
@@ -367,6 +374,22 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        showPhoto(currentIndex - 1);
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        showPhoto(currentIndex + 1);
+      });
+    }
+
     dots.forEach((dot, idx) => {
       dot.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -374,6 +397,26 @@ document.addEventListener('DOMContentLoaded', () => {
         showPhoto(idx);
       });
     });
+
+    // Support du glissement tactile (swipe) sur mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    switcher.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    switcher.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 40) {
+        if (diff < 0) {
+          showPhoto(currentIndex + 1);
+        } else {
+          showPhoto(currentIndex - 1);
+        }
+      }
+    }, { passive: true });
   });
 });
 
