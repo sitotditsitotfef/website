@@ -234,4 +234,90 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { passive: true });
   });
+
+  // 7. Comparateur interactif d'images Avant / Après (effet glisser)
+  const comparisons = document.querySelectorAll('.image-comparison');
+  comparisons.forEach(comp => {
+    let isDragging = false;
+
+    const setPositionFromClientX = (clientX) => {
+      const rect = comp.getBoundingClientRect();
+      const x = clientX - rect.left;
+      let percent = (x / rect.width) * 100;
+      if (percent < 0) percent = 0;
+      if (percent > 100) percent = 100;
+      comp.style.setProperty('--position', `${percent.toFixed(2)}%`);
+    };
+
+    comp.addEventListener('pointerdown', (e) => {
+      // Ne pas déclencher le glissement si clic sur le bouton zoom ou un badge
+      if (e.target.closest('.comparison-zoom-btn') || e.target.closest('.comparison-badge')) {
+        return;
+      }
+      isDragging = true;
+      comp.classList.add('dragging');
+      try {
+        comp.setPointerCapture(e.pointerId);
+      } catch (err) {}
+      setPositionFromClientX(e.clientX);
+    });
+
+    comp.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      setPositionFromClientX(e.clientX);
+    });
+
+    const endDrag = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      comp.classList.remove('dragging');
+      try {
+        comp.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+    };
+
+    comp.addEventListener('pointerup', endDrag);
+    comp.addEventListener('pointercancel', endDrag);
+
+    // Clics sur les badges pour basculer rapidement d'une vue à l'autre
+    const badges = comp.querySelectorAll('.comparison-badge');
+    badges.forEach(badge => {
+      badge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const target = badge.getAttribute('data-target');
+        if (target !== null) {
+          comp.classList.remove('dragging');
+          comp.style.setProperty('--position', `${target}%`);
+        }
+      });
+    });
+
+    // Zoom dans la lightbox depuis le bouton loupe
+    const zoomBtn = comp.querySelector('.comparison-zoom-btn');
+    if (zoomBtn && lightboxModal && lightboxImg) {
+      zoomBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const currentPosStr = comp.style.getPropertyValue('--position') || '50%';
+        const currentPos = parseFloat(currentPosStr);
+        const imgOverlay = comp.querySelector('.comparison-img-overlay');
+        const imgBase = comp.querySelector('.comparison-img-base');
+        const chosenImg = (currentPos >= 50 && imgOverlay) ? imgOverlay : (imgBase || imgOverlay);
+        const card = comp.closest('.project-card');
+        const title = card ? card.querySelector('.project-title')?.textContent : '';
+        const desc = card ? card.querySelector('.project-desc')?.textContent : '';
+
+        if (chosenImg) {
+          lightboxImg.src = chosenImg.src;
+          lightboxImg.alt = chosenImg.alt || 'Aperçu du projet';
+          if (lightboxTitle) lightboxTitle.textContent = title || 'Projet Sitôt Dit Si Tôt Fef';
+          if (lightboxDesc) lightboxDesc.textContent = desc || '';
+          lightboxModal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    }
+  });
 });
+

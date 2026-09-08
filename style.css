@@ -1776,6 +1776,203 @@ textarea.form-control {
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(198, 118, 59, 0.4);
 }
+
+/* ==========================================================================
+   IMAGE COMPARISON SLIDER (EFFET GLISSER AVANT / APRÈS)
+   ========================================================================== */
+
+.image-comparison {
+  --position: 50%;
+  position: relative;
+  width: 100%;
+  height: 270px;
+  overflow: hidden;
+  background-color: #1a1b1d;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+  cursor: ew-resize;
+}
+
+.image-comparison .comparison-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 62%;
+  pointer-events: none;
+  display: block;
+}
+
+.image-comparison .comparison-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: inset(0 calc(100% - var(--position, 50%)) 0 0);
+  pointer-events: none;
+  transition: clip-path 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.image-comparison.dragging .comparison-overlay,
+.image-comparison.dragging .comparison-handle {
+  transition: none !important;
+}
+
+.image-comparison .comparison-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--position, 50%);
+  transform: translateX(-50%);
+  width: 3px;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 6;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  transition: left 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.image-comparison .handle-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--color-primary);
+  border: 2px solid var(--color-accent);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.image-comparison:hover .handle-circle {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: #ffffff;
+}
+
+.image-comparison.dragging .handle-circle {
+  transform: translate(-50%, -50%) scale(1.12);
+  background: var(--color-accent);
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.image-comparison .handle-circle svg {
+  width: 14px;
+  height: 14px;
+}
+
+.comparison-hint {
+  position: absolute;
+  top: 14px;
+  right: 52px;
+  background: rgba(26, 27, 30, 0.85);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  z-index: 5;
+  pointer-events: none;
+  animation: hintPulse 2.5s infinite;
+}
+
+.comparison-hint svg {
+  width: 11px;
+  height: 11px;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.55; }
+}
+
+.comparison-badge {
+  position: absolute;
+  bottom: 12px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #ffffff;
+  backdrop-filter: blur(6px);
+  z-index: 5;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.comparison-badge.left {
+  left: 12px;
+  background: rgba(30, 32, 36, 0.88);
+}
+
+.comparison-badge.left:hover {
+  background: rgba(45, 48, 54, 0.95);
+  transform: translateY(-2px);
+}
+
+.comparison-badge.right {
+  right: 12px;
+  background: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(198, 118, 59, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.comparison-badge.right:hover {
+  background: #b56730;
+  transform: translateY(-2px);
+}
+
+.comparison-zoom-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(26, 27, 30, 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 7;
+  transition: var(--transition);
+}
+
+.comparison-zoom-btn:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: scale(1.1);
+}
+
+.comparison-zoom-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
 @media (max-width: 768px) {
   .activity-item {
     margin-bottom: 50px;
@@ -1833,6 +2030,18 @@ textarea.form-control {
   }
   .before-after-item {
     height: 220px;
+  }
+  .image-comparison {
+    height: 250px;
+  }
+  .comparison-hint {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+    right: 48px;
+  }
+  .comparison-badge {
+    font-size: 0.68rem;
+    padding: 3px 10px;
   }
 }
 
