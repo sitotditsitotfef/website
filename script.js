@@ -64,11 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (lightboxModal && lightboxImg) {
     document.querySelectorAll('.project-img-container').forEach(container => {
-      container.addEventListener('click', () => {
-        const img = container.querySelector('.project-img');
+      container.addEventListener('click', (e) => {
+        // Ne pas déclencher la lightbox si clic sur le bouton d'alternance ou les puces
+        if (e.target.closest('.photo-switch-btn') || e.target.closest('.photo-switcher-dots')) {
+          return;
+        }
+        const img = container.querySelector('.switcher-img.active') || container.querySelector('.project-img');
         const card = container.closest('.project-card');
-        const title = card ? card.querySelector('.project-title')?.textContent : '';
-        const desc = card ? card.querySelector('.project-desc')?.textContent : '';
+        const title = (img && img.dataset.title) ? `${card?.querySelector('.project-title')?.textContent || 'Projet'} - ${img.dataset.title}` : (card ? card.querySelector('.project-title')?.textContent : '');
+        const desc = (img && img.dataset.desc) ? img.dataset.desc : (card ? card.querySelector('.project-desc')?.textContent : '');
 
         if (img) {
           lightboxImg.src = img.src;
@@ -318,6 +322,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+  });
+
+  // 8. Alternance de photos avec bouton interactif
+  const photoSwitchers = document.querySelectorAll('.photo-switcher');
+  photoSwitchers.forEach(switcher => {
+    const images = switcher.querySelectorAll('.switcher-img');
+    const switchBtn = switcher.querySelector('.photo-switch-btn');
+    const switchBtnText = switchBtn ? switchBtn.querySelector('.switch-btn-text') : null;
+    const badge = switcher.querySelector('.photo-switcher-badge');
+    const dots = switcher.querySelectorAll('.switcher-dot');
+
+    if (images.length < 2) return;
+
+    let currentIndex = 0;
+
+    const showPhoto = (index) => {
+      currentIndex = (index + images.length) % images.length;
+      images.forEach((img, idx) => {
+        img.classList.toggle('active', idx === currentIndex);
+      });
+
+      const activeImg = images[currentIndex];
+      const nextImg = images[(currentIndex + 1) % images.length];
+
+      if (badge && activeImg.dataset.title) {
+        badge.textContent = activeImg.dataset.title;
+      }
+
+      if (switchBtnText && nextImg.dataset.title) {
+        switchBtnText.textContent = nextImg.dataset.title;
+      }
+
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentIndex);
+      });
+    };
+
+    if (switchBtn) {
+      switchBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        showPhoto(currentIndex + 1);
+      });
+    }
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        showPhoto(idx);
+      });
+    });
   });
 });
 
