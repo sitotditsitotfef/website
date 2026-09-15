@@ -1891,7 +1891,7 @@ textarea.form-control {
   --position: 50%;
   position: relative;
   width: 100%;
-  height: 270px;
+  height: 240px;
   overflow: hidden;
   background-color: #1a1b1d;
   user-select: none;

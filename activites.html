@@ -145,7 +145,10 @@
       <div id="bois-metal" class="activity-item">
         <div class="activity-block reverse">
           <div class="activity-content">
-            <span class="section-tag">Artisanat & Matière</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+              <span class="section-tag" style="margin-bottom: 0;">Artisanat & Matière</span>
+              <span style="font-size: 0.76rem; font-weight: 700; color: var(--color-accent); background: rgba(198, 118, 59, 0.12); padding: 3px 10px; border-radius: var(--radius-full);">2 photos</span>
+            </div>
             <h2>
               🪚⚙️ Créations Bois & Métal sur-mesure
             </h2>
@@ -176,7 +179,35 @@
             </div>
           </div>
           <div class="activity-media">
-            <img src="images/projet-caddy-vanlife.jpg" alt="Aménagement bois pour Volkswagen Caddy" class="activity-img">
+            <div class="before-after-carousel" aria-label="Photos de la table basse artisanale sur-mesure">
+              <div class="carousel-track">
+                <!-- Slide 1 -->
+                <div class="carousel-slide active">
+                  <img src="images/photo%20table%20salon.jpeg" alt="Table basse artisanale en bois massif et piétement acier dans le salon" style="object-position: center 55%;">
+                </div>
+                <!-- Slide 2 -->
+                <div class="carousel-slide">
+                  <img src="images/photo%20table%20basse.jpeg" alt="Détail du plateau en chêne massif et du piétement acier" style="object-position: center 50%;">
+                </div>
+              </div>
+
+              <!-- Boutons précédent / suivant -->
+              <button type="button" class="carousel-btn prev" aria-label="Photo précédente">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button type="button" class="carousel-btn next" aria-label="Photo suivante">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+
+              <!-- Compteur discret 1 / 2 -->
+              <div class="photo-mini-counter" aria-label="Compteur photos">
+                <span class="mini-counter-text">1 / 2</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

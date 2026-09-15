@@ -345,6 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtn = carousel.querySelector('.carousel-btn.prev');
     const nextBtn = carousel.querySelector('.carousel-btn.next');
     const pills = carousel.querySelectorAll('.carousel-pill');
+    const miniCounter = carousel.querySelector('.mini-counter-text');
     let currentIndex = 0;
 
     const goToSlide = (index) => {
@@ -354,6 +355,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (track) {
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
+      }
+
+      if (miniCounter) {
+        miniCounter.textContent = `${currentIndex + 1} / ${slides.length}`;
       }
 
       pills.forEach((pill, i) => {
@@ -484,7 +489,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = card ? card.querySelector('.project-title')?.textContent : '';
         const desc = card ? card.querySelector('.project-desc')?.textContent : '';
 
-        if (chosenImg) {
+        if (imgOverlay && imgBase) {
+          const isBefore = currentPos >= 50;
+          currentGallery = [
+            {
+              src: imgOverlay.src,
+              alt: imgOverlay.alt || 'Avant travaux',
+              title: title ? `${title} (Avant)` : 'Avant travaux',
+              desc: desc || ''
+            },
+            {
+              src: imgBase.src,
+              alt: imgBase.alt || 'Après travaux',
+              title: title ? `${title} (Après)` : 'Après travaux',
+              desc: desc || ''
+            }
+          ];
+          currentGalleryIndex = isBefore ? 0 : 1;
+          currentCardContainer = comp;
+          updateLightboxContent();
+          lightboxModal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        } else if (chosenImg) {
           currentGallery = [{
             src: chosenImg.src,
             alt: chosenImg.alt || 'Aperçu du projet',
