@@ -1,5 +1,5 @@
 // ==========================================================================
-// SITÔT DIT SI TÔT FEF - SCRIPT INTERACTION
+// SI TÔT DIT SI TÔT FEF - SCRIPT INTERACTION
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -78,8 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lightboxImg.src = item.src;
     lightboxImg.alt = item.alt || 'Aperçu du projet';
-    if (lightboxTitle) lightboxTitle.textContent = item.title || 'Projet Sitôt Dit Si Tôt Fef';
-    if (lightboxDesc) lightboxDesc.textContent = item.desc || '';
+    if (lightboxTitle) lightboxTitle.textContent = item.title || 'Projet Si Tôt Dit Si Tôt Fef';
+    if (lightboxDesc) {
+      lightboxDesc.innerHTML = item.desc || '';
+      lightboxDesc.style.display = item.desc ? 'block' : 'none';
+    }
 
     const hasMultiple = currentGallery.length > 1;
     if (lightboxCounter) {
@@ -148,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const card = container.closest('.project-card');
         const cardTitle = card?.querySelector('.project-title')?.textContent?.trim() || 'Projet';
-        const cardDesc = card?.querySelector('.project-desc')?.textContent?.trim() || '';
+        const cardDesc = card?.querySelector('.project-desc')?.innerHTML?.trim() || card?.querySelector('.project-desc')?.textContent?.trim() || '';
 
         // Cas 1 : Conteneur multi-photos (photo-switcher)
         const switcherImgs = container.querySelectorAll('.switcher-img');
@@ -278,6 +281,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { passive: true });
   }
+
+  // Clic sur le titre du projet pour ouvrir la photo et afficher la description correspondante
+  document.querySelectorAll('.project-card').forEach(card => {
+    const title = card.querySelector('.project-title');
+    if (!title) return;
+    title.addEventListener('click', () => {
+      const imgContainer = card.querySelector('.project-img-container');
+      const zoomBtn = card.querySelector('.comparison-zoom-btn');
+      if (imgContainer) {
+        imgContainer.click();
+      } else if (zoomBtn) {
+        zoomBtn.click();
+      }
+    });
+  });
 
   // 4. Interaction formulaire de contact
   const contactForm = document.getElementById('contactForm');
@@ -420,6 +438,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const comparisons = document.querySelectorAll('.image-comparison');
   comparisons.forEach(comp => {
     let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let hasMoved = false;
 
     const setPositionFromClientX = (clientX) => {
       const rect = comp.getBoundingClientRect();
@@ -430,12 +451,62 @@ document.addEventListener('DOMContentLoaded', () => {
       comp.style.setProperty('--position', `${percent.toFixed(2)}%`);
     };
 
+    const openComparisonLightbox = () => {
+      if (!lightboxModal || !lightboxImg) return;
+      const currentPosStr = comp.style.getPropertyValue('--position') || '50%';
+      const currentPos = parseFloat(currentPosStr);
+      const imgOverlay = comp.querySelector('.comparison-img-overlay');
+      const imgBase = comp.querySelector('.comparison-img-base');
+      const card = comp.closest('.project-card');
+      const title = card ? card.querySelector('.project-title')?.textContent?.trim() : 'Projet Si Tôt Dit Si Tôt Fef';
+      const desc = card ? (card.querySelector('.project-desc')?.innerHTML?.trim() || card.querySelector('.project-desc')?.textContent?.trim() || '') : '';
+
+      if (imgOverlay && imgBase) {
+        const isBefore = currentPos >= 50;
+        currentGallery = [
+          {
+            src: imgOverlay.src,
+            alt: imgOverlay.alt || 'Avant travaux',
+            title: title ? `${title} (Avant)` : 'Avant travaux',
+            desc: desc || ''
+          },
+          {
+            src: imgBase.src,
+            alt: imgBase.alt || 'Après travaux',
+            title: title ? `${title} (Après)` : 'Après travaux',
+            desc: desc || ''
+          }
+        ];
+        currentGalleryIndex = isBefore ? 0 : 1;
+        currentCardContainer = comp;
+        updateLightboxContent();
+        lightboxModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      } else if (imgBase || imgOverlay) {
+        const chosenImg = imgBase || imgOverlay;
+        currentGallery = [{
+          src: chosenImg.src,
+          alt: chosenImg.alt || 'Aperçu du projet',
+          title: title || 'Projet Si Tôt Dit Si Tôt Fef',
+          desc: desc || ''
+        }];
+        currentGalleryIndex = 0;
+        currentCardContainer = comp;
+        updateLightboxContent();
+        lightboxModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
     comp.addEventListener('pointerdown', (e) => {
       // Ne pas déclencher le glissement si clic sur le bouton zoom ou un badge
       if (e.target.closest('.comparison-zoom-btn') || e.target.closest('.comparison-badge')) {
         return;
       }
       isDragging = true;
+      hasMoved = false;
+      startX = e.clientX;
+      startY = e.clientY;
       comp.classList.add('dragging');
       try {
         comp.setPointerCapture(e.pointerId);
@@ -445,6 +516,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     comp.addEventListener('pointermove', (e) => {
       if (!isDragging) return;
+      if (Math.hypot(e.clientX - startX, e.clientY - startY) > 8) {
+        hasMoved = true;
+      }
       setPositionFromClientX(e.clientX);
     });
 
@@ -455,10 +529,21 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         comp.releasePointerCapture(e.pointerId);
       } catch (err) {}
+
+      // Si c'est un simple clic/tap sans mouvement et hors de la poignée centrale, ouvrir la photo et la description
+      if (!hasMoved && !e.target.closest('.comparison-handle')) {
+        openComparisonLightbox();
+      }
     };
 
     comp.addEventListener('pointerup', endDrag);
     comp.addEventListener('pointercancel', endDrag);
+
+    // Double-clic sur l'image ouvre aussi la visionneuse avec description
+    comp.addEventListener('dblclick', (e) => {
+      if (e.target.closest('.comparison-badge') || e.target.closest('.comparison-zoom-btn')) return;
+      openComparisonLightbox();
+    });
 
     // Clics sur les badges pour basculer rapidement d'une vue à l'autre
     const badges = comp.querySelectorAll('.comparison-badge');
@@ -476,53 +561,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Zoom dans la lightbox depuis le bouton loupe
     const zoomBtn = comp.querySelector('.comparison-zoom-btn');
-    if (zoomBtn && lightboxModal && lightboxImg) {
+    if (zoomBtn) {
       zoomBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
-        const currentPosStr = comp.style.getPropertyValue('--position') || '50%';
-        const currentPos = parseFloat(currentPosStr);
-        const imgOverlay = comp.querySelector('.comparison-img-overlay');
-        const imgBase = comp.querySelector('.comparison-img-base');
-        const chosenImg = (currentPos >= 50 && imgOverlay) ? imgOverlay : (imgBase || imgOverlay);
-        const card = comp.closest('.project-card');
-        const title = card ? card.querySelector('.project-title')?.textContent : '';
-        const desc = card ? card.querySelector('.project-desc')?.textContent : '';
-
-        if (imgOverlay && imgBase) {
-          const isBefore = currentPos >= 50;
-          currentGallery = [
-            {
-              src: imgOverlay.src,
-              alt: imgOverlay.alt || 'Avant travaux',
-              title: title ? `${title} (Avant)` : 'Avant travaux',
-              desc: desc || ''
-            },
-            {
-              src: imgBase.src,
-              alt: imgBase.alt || 'Après travaux',
-              title: title ? `${title} (Après)` : 'Après travaux',
-              desc: desc || ''
-            }
-          ];
-          currentGalleryIndex = isBefore ? 0 : 1;
-          currentCardContainer = comp;
-          updateLightboxContent();
-          lightboxModal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        } else if (chosenImg) {
-          currentGallery = [{
-            src: chosenImg.src,
-            alt: chosenImg.alt || 'Aperçu du projet',
-            title: title || 'Projet Sitôt Dit Si Tôt Fef',
-            desc: desc || ''
-          }];
-          currentGalleryIndex = 0;
-          currentCardContainer = comp;
-          updateLightboxContent();
-          lightboxModal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        }
+        openComparisonLightbox();
       });
     }
   });
